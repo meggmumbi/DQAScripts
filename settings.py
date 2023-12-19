@@ -2,7 +2,6 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    DB: str
     username: str
     password: str
     host: str
