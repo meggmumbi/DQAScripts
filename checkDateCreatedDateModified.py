@@ -5,7 +5,7 @@ import pyodbc
 from settings import settings
 
 # Establish a connection to the RabbitMQ server
-credentials = pika.PlainCredentials(settings.username, settings.password)
+credentials = pika.PlainCredentials(settings.Rabbit_MQ_username, settings.password)
 connection = pika.BlockingConnection(pika.ConnectionParameters(settings.host, settings.port, settings.virtual_host, credentials))
 channel = connection.channel()
 

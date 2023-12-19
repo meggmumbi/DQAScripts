@@ -2,7 +2,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    username: str
+    Rabbit_MQ_username: str
     password: str
     host: str
     port: str
