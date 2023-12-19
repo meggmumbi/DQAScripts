@@ -2,10 +2,11 @@
 import pika
 import json
 import pyodbc
+from settings import settings
 
 # Establish a connection to the RabbitMQ server
-credentials = pika.PlainCredentials('brian', 'brian')
-connection = pika.BlockingConnection(pika.ConnectionParameters('10.230.50.63', 5672, 'spot2', credentials))
+credentials = pika.PlainCredentials(settings.username, settings.password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(settings.host, settings.port, settings.virtual_host, credentials))
 channel = connection.channel()
 
 # Declare the exchange and the queue to subscribe to
@@ -69,10 +70,10 @@ def callback(ch, method, properties, body):
 
         # Connect to the SQL Server database where you want to save the results
         db_connection = pyodbc.connect('Driver={SQL Server};'
-                                       'Server=PAL-5CG2114M0C;'
-                                       'Database=DwapiCentral;'
-                                       'UID=sa;'
-                                       'PWD=Megg96Megg;')
+                                       f'Server={settings.MS_SQL_SERVER};'
+                                       f'Database={settings.MS_SQL_DATABASE};'
+                                       f'UID={settings.MS_SQL_USERNAME};'
+                                       f'PWD={settings.MS_SQL_PASSWORD};')
 
         # Create a cursor object for the database connection
         db_cursor = db_connection.cursor()
