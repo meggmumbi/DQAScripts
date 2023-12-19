@@ -48,16 +48,8 @@ def callback(ch, method, properties, body):
 
         # Execute the query with the MFL Code
         query = f"""SELECT COUNT(*)
-                    FROM
-                    (
-                      SELECT patientPK
-                      FROM [DWAPICentral].[dbo].[PatientExtract]
-                      GROUP BY patientPK
-                      HAVING COUNT(*) > 1
-                    ) AS dup
-                    JOIN [DWAPICentral].[dbo].[PatientExtract] AS pe
-                    ON dup.patientPK = pe.patientPK
-                    WHERE pe.sitecode = {mfl_code};"""
+          FROM PatientVisitExtract
+          WHERE visitType = 'scheduled' AND nextAppointmentDate IS NULL AND siteCode = {mfl_code};"""
 
         cursor.execute(query)
 
@@ -89,8 +81,8 @@ def callback(ch, method, properties, body):
 
         # Iterate through the results and insert them into the database
         for row in results:
-            tx_curr = row[0]
-            db_cursor.execute(merge_query, mfl_code, name, "duplicatePatientPk", tx_curr)
+            _visits = row[0]
+            db_cursor.execute(merge_query, mfl_code, name, "Meaningful_Visits", _visits)
 
         # Commit the changes to the database
         db_connection.commit()
