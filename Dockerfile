@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.8-slim
 
 # Set the working directory in the container
 WORKDIR /app
@@ -8,14 +8,18 @@ WORKDIR /app
 COPY . /app
 
 
-# Create the sources.list file
-#RUN echo "deb http://debian.ftp.acc.umu.se/debian/ buster main" > /etc/apt/sources.list
-
 # Install any needed packages specified in requirements.txt
 RUN apt-get update && \
-    apt-get install -y unixodbc unixodbc-dev && \
+    apt-get install -y unixodbc unixodbc-dev  freetds-dev && \
     rm -rf /var/lib/apt/lists/*
 
+# Install the SQL Server ODBC driver
+RUN apt-get update && \
+    apt-get install -y odbcinst1debian2 && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY odbcinst.ini /etc/odbcinst.ini
+COPY odbc.ini /etc/odbc.ini
 
 RUN pip install --no-cache-dir -r requirements.txt
 
