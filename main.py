@@ -38,11 +38,7 @@ def callback(ch, method, properties, body):
 
     if payload.get('Docket') == 'NDWH':
 
-        conn = pyodbc.connect('Driver={SQL Server};'
-                              'Server=10.230.50.83;'
-                              'Database=DWAPICentral;'
-                              'UID=dwh_readonly;'
-                              'PWD=c0nstella;')
+        conn = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};Server=10.230.50.83;Database=DWAPICentral;UID=dwh_readonly;PWD=c0nstella;')
 
         # Create a cursor object
         cursor = conn.cursor()
@@ -501,11 +497,7 @@ def callback(ch, method, properties, body):
             print(row)
 
         # Connect to the SQL Server database where you want to save the results
-        db_connection = pyodbc.connect('Driver={SQL Server};'
-                                      f'Server={settings.MS_SQL_SERVER};'
-                                       f'Database={settings.MS_SQL_DATABASE};'
-                                       f'UID={settings.MS_SQL_USERNAME};'
-                                       f'PWD={settings.MS_SQL_PASSWORD};')
+        db_connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};Server='+settings.MS_SQL_SERVER+';Database='+settings.MS_SQL_DATABASE+';UID='+settings.MS_SQL_USERNAME+';PWD='+settings.MS_SQL_PASSWORD+';')
 
         # Create a cursor object for the database connection
         db_cursor = db_connection.cursor()
